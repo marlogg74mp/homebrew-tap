@@ -1,12 +1,20 @@
 class Zipmount < Formula
   desc "Mount zip, 7z, tar and tar.gz archives read-only, without extracting"
   homepage "https://marlogg74mp.github.io/zipmount/"
-  version "0.3.0"
   license "GPL-3.0-or-later"
+
+  # The latest master, built from source: that one does need Rust.
+  head do
+    url "https://github.com/marlogg74mp/zipmount.git", branch: "master"
+    depends_on "rust" => :build
+  end
 
   # The binaries built by the release workflow, attested there: no Rust to
   # install, nothing to compile. `gh attestation verify` checks any of them.
   on_macos do
+    # Released for Apple Silicon only.
+    depends_on arch: :arm64
+
     on_arm do
       url "https://github.com/marlogg74mp/zipmount/releases/download/v0.3.0/zipmount-0.3.0-macos-arm64.tar.gz"
       sha256 "a9f7cc1ed4b8a4a6ee8fc4f9fe78a8fbaa28582de399f7bd42e7c8eac1eac140"
@@ -21,17 +29,6 @@ class Zipmount < Formula
       url "https://github.com/marlogg74mp/zipmount/releases/download/v0.3.0/zipmount-0.3.0-linux-arm64.tar.gz"
       sha256 "bf1972d6b3b783d8a3a2365ecb34da0f4837f1c537dcfbf9318ec53341683223"
     end
-  end
-
-  # The latest master, built from source: that one does need Rust.
-  head do
-    url "https://github.com/marlogg74mp/zipmount.git", branch: "master"
-    depends_on "rust" => :build
-  end
-
-  on_macos do
-    # Released for Apple Silicon only.
-    depends_on arch: :arm64
   end
 
   def install
